@@ -1,0 +1,40 @@
+pragma solidity ^0.4.19;
+contract horse {
+    struct Pony {
+        string name;
+        uint256 locked_amount;
+        address owner;
+        bool for_sale;
+        
+        uint8 mane_1;
+        uint8 mane_2;
+        uint8 mane_3;
+        uint8 coat_1;
+        uint8 coat_2;
+        uint8 coat_3;
+    }
+    
+    mapping (uint256 => Pony) public pony;
+    uint8 pony_counter;
+    address creator;
+    
+    function horse() {
+        pony_counter = 1;
+    }
+    
+    function new_pony(string _name, uint8 _mane_1, uint8 _mane_2, uint8 _mane_3, uint8 _coat_1, uint8 _coat_2, uint8 _coat_3) public payable {
+        require(msg.value >= 0.01 ether);
+        pony[pony_counter].name = _name;
+        pony[pony_counter].locked_amount = msg.value;
+        pony[pony_counter].owner = msg.sender;
+        pony[pony_counter].for_sale = false;
+        pony[pony_counter].mane_1 = _mane_1;
+        pony[pony_counter].mane_2 = _mane_2;
+        pony[pony_counter].mane_3 = _mane_3;
+        pony[pony_counter].coat_1 = _coat_1;
+        pony[pony_counter].coat_2 = _coat_2;
+        pony[pony_counter].coat_3 = _coat_3;
+        pony_counter++;
+    }
+    
+}
