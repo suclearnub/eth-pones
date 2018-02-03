@@ -37,4 +37,30 @@ contract horse {
         pony_counter++;
     }
     
+        function modify_pony(uint8 pony_id, string _name, uint8 _mane_1, uint8 _mane_2, uint8 _mane_3, uint8 _coat_1, uint8 _coat_2, uint8 _coat_3) public payable {
+        require(msg.sender == pony[pony_id].owner);
+        pony[pony_id].name = _name;
+        pony[pony_id].for_sale = false;
+        pony[pony_id].mane_1 = _mane_1;
+        pony[pony_id].mane_2 = _mane_2;
+        pony[pony_id].mane_3 = _mane_3;
+        pony[pony_id].coat_1 = _coat_1;
+        pony[pony_id].coat_2 = _coat_2;
+        pony[pony_id].coat_3 = _coat_3;
+    }
+    
+    function destroy_pony(uint8 pony_id) public {
+        require(msg.sender == pony[pony_id].owner);
+        pony[pony_id].name = '';
+        pony[pony_id].locked_amount = 0;
+        pony[pony_id].owner = 0x0;
+        pony[pony_id].for_sale = false;
+        pony[pony_id].mane_1 = 0;
+        pony[pony_id].mane_2 = 0;
+        pony[pony_id].mane_3 = 0;
+        pony[pony_id].coat_1 = 0;
+        pony[pony_id].coat_2 = 0;
+        pony[pony_id].coat_3 = 0;
+        msg.sender.transfer(pony[pony_id].locked_amount);
+    }
 }
