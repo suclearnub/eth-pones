@@ -3,6 +3,7 @@ contract horse {
     struct Pony {
         string name;
         uint256 locked_amount;
+        uint256 sale_price;
         address owner;
         bool for_sale;
         
@@ -62,5 +63,23 @@ contract horse {
         pony[pony_id].coat_2 = 0;
         pony[pony_id].coat_3 = 0;
         msg.sender.transfer(pony[pony_id].locked_amount);
+    }
+    
+    function set_sale(uint8 pony_id, bool sale) public {
+        require(msg.sender == pony[pony_id].owner);
+        pony[pony_id].for_sale = sale;
+    }
+    
+    function set_price(uint8 pony_id, uint256 price) public {
+        require(msg.sender == pony[pony_id].owner);
+        pony[pony_id].sale_price = price;
+    }
+    
+    function buy(uint8 pony_id) public payable {
+        require(msg.value >= pony[pony_id].sale_price);
+        var amount_to_send = msg.value;
+        var old_owner = pony[pony_id].owner;
+        pony[pony_id].owner = msg.sender;
+        old_owner.transfer(amount_to_send);
     }
 }
