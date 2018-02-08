@@ -11,15 +11,28 @@ contract horse {
         
         address owner;
         
+
+    }
+    
+    struct Pony_Details {
+        uint8 mane_style;
+        uint8 tail_style;
+        
         uint8 mane_1;
         uint8 mane_2;
         uint8 mane_3;
+
         uint8 coat_1;
         uint8 coat_2;
         uint8 coat_3;
+        
+        uint8 accessory_1;
+        uint8 accessory_2;
+        uint8 accessory_3;
     }
     
     mapping (uint256 => Pony) public pony;
+    mapping (uint256 => Pony_Details) public pony_details;
     uint8 pony_counter;
     address creator;
     
@@ -28,8 +41,10 @@ contract horse {
         creator = msg.sender;
     }
     
-    function new_pony(string _name, uint8 _mane_1, uint8 _mane_2, uint8 _mane_3, 
-                      uint8 _coat_1, uint8 _coat_2, uint8 _coat_3) public payable {
+    function new_pony(string _name, uint8 _mane_style, uint8 _tail_style,
+                      uint8 _mane_1, uint8 _mane_2, uint8 _mane_3,
+                      uint8 _coat_1, uint8 _coat_2, uint8 _coat_3,
+                      uint8 _accessory_1, uint8 _accessory_2, uint8 _accessory_3) public payable {
         require(msg.value >= 0.01 ether);
         pony[pony_counter].name = _name;
         pony[pony_counter].locked_amount = msg.value;
@@ -38,25 +53,38 @@ contract horse {
         pony[pony_counter].current_offer_address = 0x0;
         pony[pony_counter].owner = msg.sender;
         pony[pony_counter].for_sale = false;
-        pony[pony_counter].mane_1 = _mane_1;
-        pony[pony_counter].mane_2 = _mane_2;
-        pony[pony_counter].mane_3 = _mane_3;
-        pony[pony_counter].coat_1 = _coat_1;
-        pony[pony_counter].coat_2 = _coat_2;
-        pony[pony_counter].coat_3 = _coat_3;
+        
+        pony_details[pony_counter].mane_1 = _mane_style;
+        pony_details[pony_counter].mane_1 = _tail_style;
+        pony_details[pony_counter].mane_1 = _mane_1;
+        pony_details[pony_counter].mane_2 = _mane_2;
+        pony_details[pony_counter].mane_3 = _mane_3;
+        pony_details[pony_counter].coat_1 = _coat_1;
+        pony_details[pony_counter].coat_2 = _coat_2;
+        pony_details[pony_counter].coat_3 = _coat_3;
+        pony_details[pony_counter].accessory_1 = _accessory_1;
+        pony_details[pony_counter].accessory_2 = _accessory_2;
+        pony_details[pony_counter].accessory_3 = _accessory_3;
         pony_counter++; // Increase the ID of the next pony
     }
     
-    function modify_pony(uint8 pony_id, string _name, uint8 _mane_1, uint8 _mane_2, uint8 _mane_3,
-                         uint8 _coat_1, uint8 _coat_2, uint8 _coat_3) public payable {
+    function modify_pony(uint8 pony_id, string _name, uint8 _mane_style, uint8 _tail_style,
+                         uint8 _mane_1, uint8 _mane_2, uint8 _mane_3,
+                         uint8 _coat_1, uint8 _coat_2, uint8 _coat_3,
+                         uint8 _accessory_1, uint8 _accessory_2, uint8 _accessory_3) public payable {
         require(msg.sender == pony[pony_id].owner);
         pony[pony_id].name = _name;
-        pony[pony_id].mane_1 = _mane_1;
-        pony[pony_id].mane_2 = _mane_2;
-        pony[pony_id].mane_3 = _mane_3;
-        pony[pony_id].coat_1 = _coat_1;
-        pony[pony_id].coat_2 = _coat_2;
-        pony[pony_id].coat_3 = _coat_3;
+        pony_details[pony_id].mane_1 = _mane_style;
+        pony_details[pony_id].mane_1 = _tail_style;
+        pony_details[pony_id].mane_1 = _mane_1;
+        pony_details[pony_id].mane_2 = _mane_2;
+        pony_details[pony_id].mane_3 = _mane_3;
+        pony_details[pony_id].coat_1 = _coat_1;
+        pony_details[pony_id].coat_2 = _coat_2;
+        pony_details[pony_id].coat_3 = _coat_3;
+        pony_details[pony_id].accessory_1 = _accessory_1;
+        pony_details[pony_id].accessory_2 = _accessory_2;
+        pony_details[pony_id].accessory_3 = _accessory_3;
     }
     
     function destroy_pony(uint8 pony_id) public {
@@ -67,18 +95,35 @@ contract horse {
         pony[pony_counter].current_offer = 0;
         pony[pony_id].owner = 0x0;
         pony[pony_id].for_sale = false;
-        pony[pony_id].mane_1 = 0;
-        pony[pony_id].mane_2 = 0;
-        pony[pony_id].mane_3 = 0;
-        pony[pony_id].coat_1 = 0;
-        pony[pony_id].coat_2 = 0;
-        pony[pony_id].coat_3 = 0;
+        pony_details[pony_id].mane_1 = 0;
+        pony_details[pony_id].mane_1 = 0;
+        pony_details[pony_id].mane_1 = 0;
+        pony_details[pony_id].mane_2 = 0;
+        pony_details[pony_id].mane_3 = 0;
+        pony_details[pony_id].coat_1 = 0;
+        pony_details[pony_id].coat_2 = 0;
+        pony_details[pony_id].coat_3 = 0;
+        pony_details[pony_id].accessory_1 = 0;
+        pony_details[pony_id].accessory_2 = 0;
+        pony_details[pony_id].accessory_3 = 0;
         msg.sender.transfer(pony[pony_id].locked_amount); // Release locked ether
     }
     
     function set_sale(uint8 pony_id, bool sale) public {
         require(msg.sender == pony[pony_id].owner);
+        var ret = false;
+        if(pony[pony_id].for_sale == true && pony[pony_id].current_offer_address != 0x0) {
+            // If it's already for sale and someone's offered, we have to return the ether.
+            var value = pony[pony_id].current_offer;
+            var addr = pony[pony_id].current_offer_address;
+            pony[pony_id].current_offer = 0;
+            pony[pony_id].current_offer_address = 0x0;
+            ret = true;
+        }
         pony[pony_id].for_sale = sale; // Enable offers
+        if (ret == true) {
+            addr.transfer(value);
+        }
     }
     
     function set_minimum_offer(uint8 pony_id, uint256 price) public {
