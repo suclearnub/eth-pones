@@ -59,18 +59,23 @@ contract horse {
         pony_details[pony_id].accessory_3 = _accessory_3;
     }
     
+    function update_pony(uint8 pony_id, uint256 _locked_amount, bool _for_sale,
+                        uint256 _minimum_offer, uint256 _current_offer,
+                        address _current_offer_address, address _owner) private {
+        pony[pony_id].locked_amount = _locked_amount;
+        pony[pony_id].for_sale = _for_sale;
+        pony[pony_id].minimum_offer = _minimum_offer;
+        pony[pony_id].current_offer = _current_offer;
+        pony[pony_id].current_offer_address = _current_offer_address;
+        pony[pony_id].owner = _owner;
+    }
+    
     function new_pony(string _name, uint8 _mane_style, uint8 _tail_style,
                       uint8 _mane_1, uint8 _mane_2, uint8 _mane_3,
                       uint8 _coat_1, uint8 _coat_2, uint8 _coat_3,
                       uint8 _accessory_1, uint8 _accessory_2, uint8 _accessory_3) public payable {
         require(msg.value >= 0.01 ether);
-        pony[pony_counter].locked_amount = msg.value;
-        pony[pony_counter].minimum_offer = 0;
-        pony[pony_counter].current_offer = 0;
-        pony[pony_counter].current_offer_address = 0x0;
-        pony[pony_counter].owner = msg.sender;
-        pony[pony_counter].for_sale = false;
-        
+        update_pony(pony_counter, msg.value, false, 0, 0, 0x0, msg.sender);
         update_details(pony_counter, _name, _mane_style, _tail_style, _mane_1, _mane_2, _mane_3, _coat_1, _coat_2, _coat_3, _accessory_1, _accessory_2, _accessory_3);
         pony_counter++; // Increase the ID of the next pony
     }
@@ -85,11 +90,8 @@ contract horse {
     
     function destroy_pony(uint8 pony_id) public {
         require(msg.sender == pony[pony_id].owner);
-        pony[pony_id].locked_amount = 0;
-        pony[pony_counter].minimum_offer = 0;
-        pony[pony_counter].current_offer = 0;
-        pony[pony_id].owner = 0x0;
-        pony[pony_id].for_sale = false;
+        var release = pony[pony_id].locked_amount;
+        update_pony(pony_id, 0, false, 0, 0, 0x0, 0x0);
         update_details(pony_id, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         msg.sender.transfer(pony[pony_id].locked_amount); // Release locked ether
     }
